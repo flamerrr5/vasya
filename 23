@@ -1,0 +1,33 @@
+def draw_tree(spanning):
+	# Create a big array of 0s and 1s for pypng
+
+	pixels = []
+
+	# Add a row of off pixels for the top
+	[pixels.append([0]*bl + [1]*bl + ([0] * (img_width-2*bl))) for _ in range(bl)]
+
+	for y in range(GRID_HEIGHT):
+		# Row containing nodes
+		row = [0] * bl # First column is off
+		for x in range(GRID_WIDTH):
+			[row.append(1) for _ in range(bl)]
+			if x < GRID_WIDTH-1:
+				[row.append( int(((x,y),(x+1,y)) in spanning) ) for _ in range(bl)]
+		[row.append(0) for _ in range(bl)]
+		[pixels.append(row) for _ in range(bl)]
+
+		if y < GRID_HEIGHT-1:
+			# Row containing vertical connections between nodes
+			row = [0] * bl # First column is off
+			for x in range(GRID_WIDTH):
+				[row.append( int(((x,y),(x,y+1)) in spanning) ) for _ in range(bl)]
+				[row.append(0) for _ in range(bl)]
+			[row.append(0) for _ in range(bl)]
+			[pixels.append(row) for _ in range(bl)]
+
+	# Add a row of off pixels for the bottom
+	[pixels.append(([0] * (img_width-2*bl)) + [1] * bl + [0] * bl) for _ in range(bl)]
+
+	return pixels
+
+# Handle arguments
